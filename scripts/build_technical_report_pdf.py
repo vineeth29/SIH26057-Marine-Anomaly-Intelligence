@@ -12,6 +12,8 @@ from reportlab.platypus import (
 )
 from reportlab.pdfgen import canvas
 
+ROOT = Path(__file__).resolve().parents[1]
+
 class NumberedCanvas(canvas.Canvas):
     """Canvas that performs two passes to dynamically compute total page count."""
     def __init__(self, *args, **kwargs):

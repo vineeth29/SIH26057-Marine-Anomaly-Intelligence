@@ -225,14 +225,9 @@ def get_analysis_pdf(analysis_id: str, mission_id: str = DEFAULT_MISSION_ID) -> 
 
             # Fallback if image files were not rendered yet:
             if raw_img is None:
-                # Look in Downloads or repository root
-                import glob
-                candidates = [
-                    Path(r"C:\Users\vinee\Downloads\sss ima.jpg.jpeg"),
-                    Path(r"C:\Users\vinee\Downloads\ppp.jpeg"),
-                    Path(r"C:\Users\vinee\Downloads\allaa.jpeg"),
-                ]
-                for c in candidates:
+                repo_root = Path(__file__).resolve().parents[2]
+                sample_candidates = list((repo_root / "results" / "predictions").glob("*.png"))
+                for c in sample_candidates:
                     if c.exists():
                         raw_img = cv2.imread(str(c))
                         break

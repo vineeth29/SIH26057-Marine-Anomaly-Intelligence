@@ -191,7 +191,7 @@ def main():
 
     report = benchmark(args.runs, args.height, args.width)
 
-    eval_dir = ROOT / "evaluation"
+    eval_dir = ROOT / "docs" / "evaluation"
     eval_dir.mkdir(exist_ok=True)
     out = eval_dir / "latency_report.json"
     with open(out, "w") as f:

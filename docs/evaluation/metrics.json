@@ -1,6 +1,6 @@
 {
   "split": "test",
-  "model_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\models\\best_multiclass.pt",
+  "model_path": "models/best_multiclass.pt",
   "overall": {
     "precision": 0.7357,
     "recall": 0.6785,

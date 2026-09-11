@@ -1,7 +1,7 @@
 {
   "dataset_name": "SubPipeMini2 / SubPipeMiniSSS",
-  "dataset_root": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS",
-  "data_dir": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS\\DATA",
+  "dataset_root": "data/subpipe/SubPipeMini2/SubPipeMiniSSS",
+  "data_dir": "data/subpipe/SubPipeMini2/SubPipeMiniSSS/DATA",
   "sensor_config": {
     "cam0": [
       {

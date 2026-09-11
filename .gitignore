@@ -49,3 +49,7 @@ wheels/
 *.temp
 
 data/analysis/
+
+.venv/
+/evaluation/
+scratch/

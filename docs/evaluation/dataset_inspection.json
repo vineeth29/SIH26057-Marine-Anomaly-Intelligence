@@ -1,6 +1,6 @@
 {
-  "dataset_dir": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\data\\drishti_sss",
-  "data_yaml_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\data\\drishti_sss\\drishti.yaml",
+  "dataset_dir": "data/drishti_dataset",
+  "data_yaml_path": "configs/drishti_data.yaml",
   "class_names": {
     "0": "crab_pot",
     "1": "submarine_pipeline",

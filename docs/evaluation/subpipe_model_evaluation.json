@@ -1,7 +1,7 @@
 {
   "evaluation_name": "SubPipeMini2 / best_multiclass.pt",
   "checkpoint": {
-    "absolute_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\models\\best_multiclass.pt",
+    "absolute_path": "models/best_multiclass.pt",
     "sha256": "0e1cb68aff53a80ec51aebff5769f08f0153994d54451658c69908d2721599b2",
     "size_mb": 5.939
   },
@@ -17,7 +17,7 @@
     "notes": "SubPipe has 1 class (Pipeline/class 0). Model class 1 = submarine_pipeline. Only class-1 predictions are compared."
   },
   "dataset": {
-    "root": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS",
+    "root": "data/subpipe/SubPipeMini2/SubPipeMiniSSS",
     "hf_image_resolution": "5000x500 px (PBM, 10:1 aspect)",
     "lf_image_resolution": "2500x500 px (PBM, 5:1 aspect)"
   },
