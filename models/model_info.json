@@ -12,5 +12,10 @@
   "parameters": 11137535,
   "size_bytes": 22520746,
   "sha256": "898ba4c1cafa23b9f55d18b3bfdbe615e26264a38d109fb391c303c16aa57314",
-  "mAP50": 0.877
+  "mAP50": 0.7138,
+  "mAP50_peak": 0.7179,
+  "precision": 0.7948,
+  "recall": 0.7044,
+  "f1": 0.7469,
+  "mAP50_95": 0.545
 }

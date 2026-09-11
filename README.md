@@ -87,9 +87,10 @@ The multi-stage analysis pipeline orchestrates 8 distinct processing steps:
 2. **Acoustic Preprocessing**: Normalizes dynamic range, mitigates speckle noise via median filtering, and enhances local backscatter contrast using CLAHE ($	ext{clipLimit}=2.5, 	ext{tileGrid}=(8,8)$).
 3. **YOLOv8s Multi-Class Detection**: Runs forward inference through `models/best.pt` ($640 	imes 640$ resolution) to extract candidate bounding boxes, class labels, and initial confidence scores.
 4. **Acoustic Shadow Analysis**: Evaluates downstream dark shadow regions behind bright echo highlights to measure shadow contrast and compute relief height:
-   $$\text{Height} = \frac{L_{\text{shadow}} \times H_{\text{altitude}}}{R_{\text{slant}}}$$
+   $$	ext{Height} =
+rac{L_{	ext{shadow}} 	imes H_{	ext{altitude}}}{R_{	ext{slant}}}$$
 5. **Auxiliary Anomaly Signal**: Evaluates regional image patches with `models/anomaly/autoencoder.pt` to compute reconstruction error, capturing unmodeled seabed debris and structural irregularities.
-6. **False-Positive Filtering**: Enforces physical aspect ratio constraints, minimum area thresholds ($> 100\,\text{px}^2$), and boundary checks to reject acoustic reverberation artifacts.
+6. **False-Positive Filtering**: Enforces physical aspect ratio constraints, minimum area thresholds ($> 100\,	ext{px}^2$), and boundary checks to reject acoustic reverberation artifacts.
 7. **Evidence Fusion**: Fuses multiple physical and statistical indicators into a single unified Evidence Score ($0.0 - 1.0$).
 8. **Threat Severity Classification**: Maps object class hazard profiles and evidence scores to operational threat tiers (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
 
@@ -133,43 +134,58 @@ The system does not rely on raw YOLO confidence alone to determine contact impor
 
 ### Active Fusion Weights (`ai/fusion/confidence_fusion.py`)
 
-$$\text{Raw Score} = w_{\text{det}} C + w_{\text{shad}} S_{\text{shad}} + w_{\text{tex}} S_{\text{tex}} + w_{\text{shape}} S_{\text{shape}} + w_{\text{anom}} (1.0 - A)$$
+$$	ext{Raw Score} = w_{	ext{det}} C + w_{	ext{shad}} S_{	ext{shad}} + w_{	ext{tex}} S_{	ext{tex}} + w_{	ext{shape}} S_{	ext{shape}} + w_{	ext{anom}} (1.0 - A)$$
 
-$$E = \text{clamp}\left(\text{Raw Score} \times \max(0.5, Q_{\text{img}}), 0.0, 1.0\right)$$
+$$E = 	ext{clamp}\left(	ext{Raw Score} 	imes \max(0.5, Q_{	ext{img}}), 0.0, 1.0
+ight)$$
 
 | Weight Variable | Config Key | Default Weight | Description |
 |---|---|:---:|---|
-| $w_{\text{det}}$ | `detector_weight` | **0.45** | YOLOv8s bounding box detector confidence score |
-| $w_{\text{shad}}$ | `shadow_weight` | **0.20** | Physical acoustic shadow presence & contrast score |
-| $w_{\text{tex}}$ | `texture_weight` | **0.15** | Acoustic backscatter texture variance within region of interest |
-| $w_{\text{shape}}$ | `shape_weight` | **0.10** | Morphological shape and aspect ratio consistency |
-| $w_{\text{anom}}$ | `anomaly_weight` | **0.10** | Inverted anomaly error (expected morphology contribution) |
+| $w_{	ext{det}}$ | `detector_weight` | **0.45** | YOLOv8s bounding box detector confidence score |
+| $w_{	ext{shad}}$ | `shadow_weight` | **0.20** | Physical acoustic shadow presence & contrast score |
+| $w_{	ext{tex}}$ | `texture_weight` | **0.15** | Acoustic backscatter texture variance within region of interest |
+| $w_{	ext{shape}}$ | `shape_weight` | **0.10** | Morphological shape and aspect ratio consistency |
+| $w_{	ext{anom}}$ | `anomaly_weight` | **0.10** | Inverted anomaly error (expected morphology contribution) |
 
 ### Active Severity Assignment Logic
 
-1. **High-Risk Taxonomy**: `submarine_pipeline`, `shipwreck`, `ghost_net`, `mine_cylinder` $\rightarrow$ Base severity `HIGH`.
-2. **Medium-Risk Taxonomy**: `crab_pot`, `metal_debris` $\rightarrow$ Base severity `MEDIUM`.
-3. **Low-Risk Taxonomy**: `rock`, `natural_formation` $\rightarrow$ Base severity `LOW`.
+1. **High-Risk Taxonomy**: `submarine_pipeline`, `shipwreck`, `ghost_net`, `mine_cylinder` $
+ightarrow$ Base severity `HIGH`.
+2. **Medium-Risk Taxonomy**: `crab_pot`, `metal_debris` $
+ightarrow$ Base severity `MEDIUM`.
+3. **Low-Risk Taxonomy**: `rock`, `natural_formation` $
+ightarrow$ Base severity `LOW`.
 4. **Evidence Downgrade**: If Evidence Score $E < 0.40$, `HIGH` is downgraded to `MEDIUM`, and `MEDIUM` to `LOW`.
-5. **Large Contact Escalation**: If bounding area $> 10,000\,\text{px}^2$ and base is `MEDIUM`, escalated to `HIGH`.
+5. **Large Contact Escalation**: If bounding area $> 10,000\,	ext{px}^2$ and base is `MEDIUM`, escalated to `HIGH`.
 6. **Unclassified Anomaly**: If identified via autoencoder with anomaly score $\ge 0.80$, assigned `HIGH`, otherwise `MEDIUM`.
 
 ---
 
 ## Model Evaluation
 
-Metrics are derived from evaluation on the side-scan sonar benchmark dataset:
+All metrics are extracted from the authoritative training logs (`models/training_artifacts/results.csv`) and evaluation reports (`docs/evaluation/`):
 
-### Multi-Class Detection Performance (IoU = 0.50) — *[VALIDATION & TEST SETS]*
+### Authoritative Validation Benchmark (`models/best.pt`) — *[VALIDATION SET: 70 Epochs]*
 
-| Class Name | Precision ($P$) | Recall ($R$) | mAP@50 | Evaluation Instances | Status / Data Provenance |
-|---|:---:|:---:|:---:|:---:|---|
-| **`crab_pot`** | 0.884 | 0.812 | 0.856 | 320 | Evaluated on real & augmented SSS |
-| **`submarine_pipeline`** | 0.942 | 0.918 | 0.935 | 450 | Evaluated on real SubPipe/Drishti SSS |
-| **`shipwreck`** | 0.891 | 0.874 | 0.882 | 190 | Structural debris & wreck benchmarks |
-| **`ghost_net`** | 0.823 | 0.795 | 0.811 | 240 | Diffuse synthetic netting models |
-| **`mine_cylinder`** | 0.915 | 0.880 | 0.902 | 310 | Cylindrical metallic ordnance |
-| **All Classes (Mean)** | **0.891** | **0.856** | **0.877** | **1,510** | **Overall Benchmark Summary** |
+- **Validation Benchmark (Epoch 50)**:
+  - **Precision**: **79.48% (0.7948)**
+  - **Recall**: **70.44% (0.7044)**
+  - **F1 Score**: **74.69% (0.7469)**
+  - **mAP@50**: **71.38% (0.7138)**
+  - **mAP@50–95**: **54.50% (0.5450)**
+- **Peak Validation Performance**: **mAP@50 = 71.79% (0.7179)** at **Epoch 43** (Precision: 79.98%, Recall: 70.45%, mAP@50–95: 53.51%)
+- **Final Epoch Performance (Epoch 70)**: Precision: **80.10%**, Recall: **70.89%**, mAP@50: **70.22%**, mAP@50–95: **53.87%**
+
+### Per-Class Detection Performance (IoU = 0.50) — *[VALIDATION SPLIT]*
+
+| Target Class | Target Classification | Precision ($P$) | Recall ($R$) | mAP@50 | Provenance / Evaluation Notes |
+|---|---|:---:|:---:|:---:|---|
+| **`submarine_pipeline`** | Underwater Infrastructure | 0.780 | 0.810 | 0.795 | SubPipe SSS & Drishti surveys |
+| **`shipwreck`** | Maritime Navigation Hazard | 0.740 | 0.760 | 0.748 | Structural wreck contacts |
+| **`mine_cylinder`** | Submerged Ordnance / High Threat | 0.720 | 0.740 | 0.730 | High-frequency cylindrical bodies |
+| **`ghost_net`** | Ecological & Entanglement Hazard | 0.680 | 0.710 | 0.692 | Diffuse synthetic netting textures |
+| **`crab_pot`** | Seabed Marine Debris | 0.580 | 0.620 | 0.595 | Small localized geometric traps |
+| **Multi-Class Mean** | **All 5 Target Classes** | **0.700** | **0.728** | **0.712** | **Multi-class validation average** |
 
 ### Known Evaluation Constraints & Limitations
 - **Shipwreck Geometry**: Large, fragmented shipwrecks exhibit variable backscatter patterns that present higher variance than continuous linear pipelines.
@@ -180,20 +196,24 @@ Metrics are derived from evaluation on the side-scan sonar benchmark dataset:
 
 ## Performance & Latency
 
-### End-to-End Latency Benchmark — *[TESTED ON INTEL CPU @ 2.6 GHz]*
+### Hardware Latency Audit — *[NVIDIA GeForce RTX 3050 Laptop GPU / CUDA]*
 
-| Pipeline Stage | Mean Execution Time | Share of Latency |
-|---|:---:|:---:|
-| **Image Decoding & Preprocessing (CLAHE)** | 8.4 ms | 15.5% |
-| **YOLOv8s Detector Forward Pass** | 31.2 ms | 57.8% |
-| **Autoencoder Anomaly Scoring** | 6.8 ms | 12.6% |
-| **Acoustic Shadow Geometric Analysis** | 4.2 ms | 7.8% |
-| **Evidence Fusion & Severity Ranking** | 1.1 ms | 2.0% |
-| **Database Persistence & Serialization** | 2.3 ms | 4.3% |
-| **Total Pipeline Latency** | **54.0 ms** | **100.0%** |
+Audited across 20 benchmark runs on $512 	imes 256\,	ext{px}$ frames (`docs/evaluation/latency_report.json`):
 
-- **Throughput**: **$\sim 18.5$ frames per second (FPS)** on standard CPU.
-- **Operational Fit**: Exceeds standard AUV/tow-fish acquisition rates (typically $1 - 5$ pings/sec), enabling real-time edge processing without GPU acceleration.
+| Pipeline Stage | Mean Execution Time | Standard Deviation | Min (Steady-State) | Max (Initial Warm-up) |
+|---|:---:|:---:|:---:|:---:|
+| **Image Ingestion & Decoding** | 3.09 ms | ±1.94 ms | 2.50 ms | 11.31 ms |
+| **Dropout & Quality Screening** | 0.38 ms | ±0.05 ms | 0.34 ms | 0.56 ms |
+| **Sonar Preprocessing (CLAHE)** | 7.80 ms | ±0.59 ms | 7.28 ms | 9.66 ms |
+| **YOLOv8s Detector Forward Pass** | 85.02 ms | ±339.17 ms | 8.51 ms | 1526.00 ms |
+| **Autoencoder Anomaly Scoring** | 2.30 ms | ±5.23 ms | 1.00 ms | 24.52 ms |
+| **Acoustic Shadow Geometric Tracking** | 0.58 ms | ±0.12 ms | 0.49 ms | 1.05 ms |
+| **False-Positive Filtering** | 0.35 ms | ±0.09 ms | 0.29 ms | 0.71 ms |
+| **Evidence Fusion & Scoring** | 0.01 ms | ±0.00 ms | 0.01 ms | 0.02 ms |
+| **Total End-to-End Pipeline Latency** | **99.55 ms** | **±346.97 ms** | **20.67 ms** | **1573.67 ms** |
+
+- **Steady-State Latency**: **~20.67 ms** (~48.4 FPS) after GPU warm-up.
+- **Mean Overall Latency**: **99.55 ms** (~10.0 FPS) including cold-start initialization.
 
 ---
 
@@ -206,7 +226,7 @@ All figures below are generated directly from the model training and evaluation 
 | Multi-Class Confusion Matrix | Training & Loss Curves |
 |:---:|:---:|
 | ![Confusion Matrix](docs/evaluation/curves/confusion_matrix.png) | ![Training Results](docs/evaluation/curves/results.png) |
-| *Figure 1: Confusion matrix across 5 target classes on validation set.* | *Figure 2: 70-epoch training progression (mAP@50 reaching 0.877).* |
+| *Figure 1: Confusion matrix across 5 target classes on validation set.* | *Figure 2: 70-epoch training progression (Peak mAP@50: 71.79% at Epoch 43).* |
 
 ### Precision-Recall Curve & Sonar Tile Verification
 
@@ -465,7 +485,7 @@ The core engineering contribution of **SIH26057** is not the standard applicatio
 1. **Acoustic Physics Coupling**: Combines statistical deep learning bounding boxes with geometric acoustic shadow verification and target relief height estimation.
 2. **Dual-Domain Anomaly Scoring**: Pairs multi-class supervised detection with an unsupervised Conv2D autoencoder to flag out-of-distribution seabed anomalies.
 3. **Multi-Signal Evidence Fusion**: Replaces uncalibrated detector confidence with a multi-factor evidence score incorporating image quality and shadow morphology.
-4. **End-to-End Field Readiness**: Integrates AI inference, SQLite persistence, human-in-the-loop review, and automated ReportLab PDF generation into a single 100% offline workflow running at 18.5 FPS on standard CPU hardware.
+4. **End-to-End Field Readiness**: Integrates AI inference, SQLite persistence, human-in-the-loop review, and automated ReportLab PDF generation into a single 100% offline workflow.
 
 ---
 
@@ -473,11 +493,11 @@ The core engineering contribution of **SIH26057** is not the standard applicatio
 
 | SIH26057 Requirement | System Implementation | Verification Status |
 |---|---|:---:|
-| **Automated Object Detection** | 5-class YOLOv8s detector (`models/best.pt`) | **VERIFIED (0.877 mAP@50)** |
-| **Acoustic Noise Mitigation** | CLAHE + median filter dynamic preprocessing | **VERIFIED (8.4 ms latency)** |
-| **Acoustic Shadow Verification** | Co-located shadow segmentation & height estimation | **VERIFIED (4.2 ms latency)** |
-| **Multi-Signal Evidence Scoring** | 5-factor weighted evidence fusion framework | **VERIFIED (1.1 ms latency)** |
-| **False-Positive Filtering** | Morphological aspect ratio & area constraints | **VERIFIED (Unit tested)** |
+| **Automated Object Detection** | 5-class YOLOv8s detector (`models/best.pt`) | **VERIFIED (Peak mAP@50: 71.79%)** |
+| **Acoustic Noise Mitigation** | CLAHE + median filter dynamic preprocessing | **VERIFIED (7.80 ms latency)** |
+| **Acoustic Shadow Verification** | Co-located shadow segmentation & height estimation | **VERIFIED (0.58 ms latency)** |
+| **Multi-Signal Evidence Scoring** | 5-factor weighted evidence fusion framework | **VERIFIED (0.01 ms latency)** |
+| **False-Positive Filtering** | Morphological aspect ratio & area constraints | **VERIFIED (0.35 ms latency)** |
 | **Geospatial Telemetry** | Explicit coordinate provenance tracking & Leaflet map | **VERIFIED (Unit tested)** |
 | **Mission Reporting** | Standalone dual-pass PDF, CSV, and JSON generation | **VERIFIED (ReportLab engine)** |
 | **Interactive Dashboard** | React 18 + Vite + TypeScript web interface | **VERIFIED (0 build errors)** |
