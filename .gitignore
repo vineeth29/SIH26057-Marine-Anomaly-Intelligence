@@ -1,43 +1,51 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
-env/
-venv/
-ENV/
-train_env/
-wheels/
-*.egg-info/
-dist/
-build/
+
+# Caches and test artifacts
 .pytest_cache/
 .coverage
 htmlcov/
+.tox/
+.nox/
+.hypothesis/
 
-# Node / Frontend
+# Node & Frontend build outputs
 frontend/node_modules/
 frontend/dist/
-frontend/.vite/
-frontend/.env.local
+frontend/dist-ssr/
+frontend/.cache/
+*.local
 
-# Databases & Runtime Logs
-*.log
-*.sqlite3
-*.db-journal
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
 
-# Large Raw Datasets (Keep data/ directory structure but ignore huge data files)
-data/**/*.png
-data/**/*.jpg
-data/**/*.jpeg
-data/**/*.raw
-data/**/*.mat
-!data/README.md
-
-# OS / IDE
+# Operating System & IDE clutter
 .DS_Store
 Thumbs.db
-.idea/
 .vscode/
+.idea/
 *.swp
+*.swo
+
+# Large raw datasets (reproducible via scripts / data/README.md)
+data/drishti_sss/
+data/subpipe/
+data/sih26057_combined/
+data/demo/*.png
+data/demo/*.jpg
+data/demo/*.jpeg
+
+# Training outputs & weight checkpoints (canonical model stored in models/best.pt)
+runs/
+weights/
+train_env/
+wheels/
+*.tmp
+*.temp
+
+data/analysis/

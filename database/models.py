@@ -136,21 +136,25 @@ class Track(Base):
 
 _engine = None
 _SessionLocal = None
+DEFAULT_DB_PATH = str(Path(__file__).resolve().parent.parent / "sih26057.db")
 
 
-def get_engine(db_path: str = "sih26057.db"):
+def get_engine(db_path: str = None):
     global _engine
+    if db_path is None:
+        db_path = os.environ.get("DB_PATH", DEFAULT_DB_PATH)
     if _engine is None:
         db_url = f"sqlite:///{db_path}"
         _engine = create_engine(
             db_url,
             connect_args={"check_same_thread": False},
+            poolclass=StaticPool,
         )
-        Base.metadata.create_all(_engine, checkfirst=True)
+        Base.metadata.create_all(_engine)
     return _engine
 
 
-def get_session(db_path: str = "sih26057.db") -> Session:
+def get_session(db_path: str = None) -> Session:
     global _SessionLocal
     engine = get_engine(db_path)
     if _SessionLocal is None:
@@ -158,8 +162,8 @@ def get_session(db_path: str = "sih26057.db") -> Session:
     return _SessionLocal()
 
 
-def init_db(db_path: str = "sih26057.db"):
+def init_db(db_path: str = None):
     """Initialize database and ensure tables exist."""
     engine = get_engine(db_path)
-    Base.metadata.create_all(engine, checkfirst=True)
+    Base.metadata.create_all(engine)
     return engine

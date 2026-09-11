@@ -1,93 +1,65 @@
-# SIH26057 System Architecture
+# System Architecture & AI Pipeline Specification
 
-## End-to-End Pipeline Architecture
+## High-Level Architecture
+
+The SIH26057 system implements a decoupled, high-performance architecture consisting of:
+1. **Perception Engine (`ai/`)**: Modular computer vision and acoustic signal processing pipelines.
+2. **Execution Bridge (`backend/app/pipeline_bridge.py`)**: Synchronous & asynchronous execution manager.
+3. **Application Layer (`backend/app/api.py`)**: Asynchronous FastAPI service exposing authenticated REST endpoints.
+4. **Presentation Layer (`frontend/`)**: Modern reactive interface providing situational awareness for sonar operators.
+
+---
+
+## AI Processing Pipeline
 
 ```
-                                  [ RAW SIDE-SCAN SONAR IMAGE ]
-                                                │
-                                                ▼
-                                    ┌───────────────────────┐
-                                    │   Quality Assessor    │ ───► Sharpness, Contrast, Noise,
-                                    │ & Dropout Detector    │      Column Dropout Runs Check
-                                    └───────────────────────┘
-                                                │
-                                                ▼
-                                    ┌───────────────────────┐
-                                    │   Sonar Preprocessor  │ ───► Grayscale Conversion, Dynamic Range
-                                    │       (CLAHE)         │      Normalization, Adaptive Bilateral Denoising
-                                    └───────────────────────┘
-                                                │
-                       ┌────────────────────────┴────────────────────────┐
-                       ▼                                                 ▼
-            ┌─────────────────────┐                           ┌─────────────────────┐
-            │   YOLOv8s Detector  │                           │   Autoencoder Anom  │
-            │   (5 Target Classes)│                           │   Detector (PyTorch)│
-            └─────────────────────┘                           └─────────────────────┘
-                       │                                                 │
-            Bboxes & Confidence                                 Reconstruction Residual
-                       │                                                 │
-                       ▼                                                 │
-            ┌─────────────────────┐                                     │
-            │  Acoustic Shadow    │                                     │
-            │     Analyzer        │                                     │
-            └─────────────────────┘                                     │
-                       │                                                 │
-            Shadow Length & Height                                       │
-                       │                                                 │
-                       ▼                                                 │
-            ┌─────────────────────┐                                     │
-            │ False-Positive (FP) │                                     │
-            │       Filter        │                                     │
-            └─────────────────────┘                                     │
-                       │ (Aspect Ratio, Area, Texture)                   │
-                       └────────────────────────┬────────────────────────┘
-                                                │
-                                                ▼
-                                    ┌───────────────────────┐
-                                    │ Multi-Modal Evidence  │ ───► Fused Threat Score (0–100%)
-                                    │     Fusion Engine     │      Severity Categorization
-                                    └───────────────────────┘
-                                                │
-                       ┌────────────────────────┼────────────────────────┐
-                       ▼                        ▼                        ▼
-            ┌─────────────────────┐  ┌─────────────────────┐  ┌─────────────────────┐
-            │ SQLAlchemy / SQLite │  │  FastAPI REST API   │  │  ReportLab PDF /    │
-            │   (sih26057.db)     │  │  (backend/app/)     │  │  CSV / JSON Export  │
-            └─────────────────────┘  └─────────────────────┘  └─────────────────────┘
-                                                │
-                                                ▼
-                                     [ React 18 / Vite UI ]
+Raw Sonar Tile (H x W x C)
+       │
+       ▼
+[01. Sonar Preprocessing]
+       ├── Grayscale conversion & Contrast Normalization
+       ├── CLAHE enhancement (tileGridSize=(8,8), clipLimit=2.0)
+       └── Metric computation (Mean, Std, Entropy, Dynamic Range)
+       │
+       ├───► [02. Autoencoder Anomaly Detection]
+       │         └── Latent reconstruction error (MSE) -> Anomaly Score ($0.0 - 1.0$)
+       │
+       ├───► [03. Dropout & Signal Quality Analysis]
+       │         └── Row-wise brightness & zero-run detection -> Blank fraction
+       │
+       ▼
+[04. YOLOv8n Target Detection]
+       └── Multi-class inference -> [Bounding Boxes, Class IDs, Raw Confidence]
+       │
+       ▼
+[05. Acoustic Shadow Geometric Analysis]
+       ├── Highlight-to-shadow gradient calculation
+       ├── Shadow length and offset validation
+       └── Shadow score computation ($S_{shadow} \in [0, 1]$)
+       │
+       ▼
+[06. False Positive Rejection Filter]
+       ├── Minimum area threshold ($>200\,\text{px}^2$)
+       ├── Aspect ratio constraint ($AR \in [0.1, 10.0]$)
+       └── Shadow-contrast compatibility check
+       │
+       ▼
+[07. Multi-Signal Evidence Fusion]
+       ├── $E = w_{det} C_{det} + w_{shad} S_{shad} + w_{anom} S_{anom} + w_{snr} S_{snr}$
+       ├── Threat Severity Classification (HIGH / MEDIUM / LOW)
+       └── Geolocation mapping (GPS / Dead Reckoning / Simulated Demo fallback)
+       │
+       ▼
+[08. Persistence & Operator Dispatch]
+       ├── SQLite storage
+       └── Real-time WebSocket / REST delivery
 ```
 
 ---
 
-## Component Responsibilities
+## False Positive Suppression Strategy
 
-1. **`ai/preprocessing/sonar_preprocessor.py`**:
-   - Contrast-Limited Adaptive Histogram Equalization (CLAHE)
-   - Dynamic range stretching and Gaussian/Bilateral denoising
-   - Background intensity flattening to handle acoustic attenuation with range
-
-2. **`ai/quality/dropout_detector.py` & `utils/quality.py`**:
-   - Focus / sharpness index using Laplacian variance
-   - Acoustic transducer dropout run detection (blank columns)
-   - Discontinuity and heave/pitch artifact detection
-
-3. **`ai/detection/yolo_detector.py`**:
-   - Neural target inference using trained YOLOv8s weights (`models/best.pt`)
-   - NMS and IoU filtering across 5 key target categories
-
-4. **`ai/shadow_analysis/shadow_analyzer.py`**:
-   - Physics-informed ray casting and thresholding to detect acoustic shadow cast behind elevated objects
-   - Target height estimation based on shadow length and slant range geometry
-
-5. **`ai/fp_filter/false_positive_filter.py`**:
-   - Morphological aspect-ratio analysis (distinguishing long linear pipelines from compact debris)
-   - Rejecting spurious detections with non-physical geometry or noise artifacts
-
-6. **`ai/anomaly/anomaly_detector.py`**:
-   - Unsupervised deep autoencoder reconstruction error calculation for open-set / uncatalogued seabed anomalies
-
-7. **`ai/fusion/confidence_fusion.py`**:
-   - Weighted multi-factor evidence aggregation combining detector confidence, acoustic shadow presence, texture metrics, shape profile, and anomaly residual
-   - Dynamic weight redistribution when acoustic shadows are unavailable or obscured
+In sidescan sonar imagery, seabed reverberations, sand ripples, and thermocline artifacts frequently trigger spurious detections in pure deep-learning models. Our 3-stage validation mitigates this:
+1. **Acoustic Shadow Verification**: Genuine seabed protrusions block acoustic return, creating an acoustic shadow behind the target relative to the nadir track. Detections lacking appropriate shadow regions are penalized.
+2. **Quality & Dropout Gate**: High-noise or signal-loss tiles are flagged, preventing false triggers caused by acoustic beam dropouts.
+3. **Geometric Prior Bounds**: Enforces realistic physical aspect ratio and boundary checks.

@@ -1,28 +1,24 @@
-# Sonar Data Directory — SIH26057
+# Datasets & Sonar Data Documentation
 
-## Dataset Policy
-To maintain repository agility, large raw sonar recordings and tile archives (e.g. SubPipe 96k raw tiles) are **not tracked in Git**.
+## SSS Dataset Overview
 
-## Datasets Supported
+The system processes high-resolution side-scan sonar (SSS) imagery across multiple frequency bands (e.g. 450 kHz and 900 kHz).
 
-### 1. SubPipe (Underwater Pipeline Inspection Dataset)
-- **Source:** [REMARO Network SubPipe Dataset](https://github.com/remaro-network/SubPipe-dataset)
-- **Target Category:** `submarine_pipeline`
-- **Data Format:** High-Frequency (HF) and Low-Frequency (LF) Side-Scan Sonar waterfall strips.
+### Integrated Datasets
+1. **Drishti SSS Dataset**: Side-scan sonar dataset containing marine debris annotations (`crab_pot`, `ghost_net`, `shipwreck`, `mine_cylinder`).
+2. **SubPipe SSS Dataset**: Industrial submarine pipeline inspection dataset with continuous linear infrastructure targets.
+3. **Synthetic Mission Benchmark**: Generated high-fidelity sonar simulation frames for end-to-end integration and calibration testing (`scripts/setup_demo.py`).
 
-### 2. Drishti / Combined Multi-Class Debris Dataset
-- **Configuration:** `configs/drishti_data.yaml`
-- **Classes:** `submarine_pipeline`, `shipwreck`, `ghost_net`, `mine_cylinder`, `crab_pot`
+---
 
-## Dataset Preparation & Tiling Scripts
-Use the curated scripts in `scripts/` to generate training and evaluation datasets:
+## Data Preparation & Tiling Pipeline
+
+Raw side-scan sonar waterfall logs (e.g. $5000 \times 1000$ pixels) are tiled using sliding windows with 25% overlap:
+- Tile Size: $640 \times 640$ pixels
+- Normalization: CLAHE + dynamic range normalization
+- Script: `scripts/tile_subpipe.py` and `scripts/build_combined_dataset.py`
+
+To generate synthetic demonstration frames:
 ```bash
-# Inspect raw dataset
-python scripts/inspect_subpipe.py --path <path-to-subpipe>
-
-# Prepare and tile large sonar strips into 640x640 training tiles
-python scripts/tile_subpipe.py --input-dir <path> --output-dir data/tiled --tile-size 640 --overlap 0.2
-
-# Validate dataset balance and annotations
-python scripts/validate_tiling.py --dataset-dir data/tiled
+python scripts/setup_demo.py
 ```
