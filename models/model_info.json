@@ -1,11 +1,16 @@
 {
+  "model": "YOLOv8s",
   "classes": {
+    "0": "crab_pot",
     "1": "submarine_pipeline",
     "2": "shipwreck",
     "3": "ghost_net",
     "4": "mine_cylinder"
   },
-  "mAP50": 0.712,
-  "model": "YOLOv8s",
-  "input_size": 640
+  "num_classes": 5,
+  "input_size": 640,
+  "parameters": 11137535,
+  "size_bytes": 22520746,
+  "sha256": "898ba4c1cafa23b9f55d18b3bfdbe615e26264a38d109fb391c303c16aa57314",
+  "mAP50": 0.877
 }

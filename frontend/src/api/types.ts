@@ -1,5 +1,4 @@
-// Mirrors backend/app/schemas.py. Keep these in sync manually for now —
-// if the API grows, consider generating this from the OpenAPI schema.
+// Mirrors backend/app/schemas.py
 
 export type LocationSource =
   | "REAL_GPS"
@@ -43,6 +42,31 @@ export interface Detection {
   shadow_details: Record<string, unknown>;
   fusion_breakdown: Record<string, unknown>;
   status: DetectionStatus;
+}
+
+export interface DetectionRecord {
+  detection_id: string;
+  image_id?: string | null;
+  mission_id?: string | null;
+  class_name: string;
+  confidence: number;
+  is_anomaly: boolean;
+  anomaly_score: number;
+  shadow_score: number;
+  evidence_score: number;
+  severity: Severity;
+  bbox: number[];
+  lat?: number | null;
+  lon?: number | null;
+  depth_m?: number | null;
+  location_source?: LocationSource | string | null;
+  coordinates_label?: string | null;
+  mode?: string | null;
+  model_version?: string | null;
+  operator_status?: string | null;
+  operator_label?: string | null;
+  operator_note?: string | null;
+  created_at?: string | null;
 }
 
 export interface ImageInfo {
@@ -106,4 +130,26 @@ export interface HealthResponse {
   status: string;
   model_loaded: boolean;
   version: string;
+}
+
+export interface MissionSummary {
+  mission_id: string;
+  name: string;
+  date?: string | null;
+  area?: string | null;
+  status?: string | null;
+  data_label?: string | null;
+  image_count?: number;
+  detection_count?: number;
+  anomaly_count?: number;
+}
+
+export interface MissionDetail extends MissionSummary {
+  high_risk_count?: number;
+}
+
+export interface OperatorReviewRequest {
+  status: string;
+  label?: string | null;
+  note?: string | null;
 }

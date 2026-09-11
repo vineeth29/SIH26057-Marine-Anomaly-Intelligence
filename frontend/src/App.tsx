@@ -2,7 +2,12 @@ import { Routes, Route } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { Dashboard } from "./pages/Dashboard";
 import { SonarAnalysis } from "./pages/SonarAnalysis";
-import { ComingSoon } from "./pages/ComingSoon";
+import { Detections } from "./pages/Detections";
+import { AnomalyAnalysis } from "./pages/AnomalyAnalysis";
+import { MapView } from "./pages/MapView";
+import { Reports } from "./pages/Reports";
+import { ModelView } from "./pages/ModelView";
+import { SystemStatus } from "./pages/SystemStatus";
 
 function App() {
   return (
@@ -10,12 +15,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/sonar-analysis" element={<SonarAnalysis />} />
-        <Route path="/detections" element={<ComingSoon pageName="Detections" />} />
-        <Route path="/anomaly-analysis" element={<ComingSoon pageName="Anomaly Analysis" />} />
-        <Route path="/map" element={<ComingSoon pageName="Map" />} />
-        <Route path="/reports" element={<ComingSoon pageName="Reports" />} />
-        <Route path="/model" element={<ComingSoon pageName="Model" />} />
-        <Route path="/system-status" element={<ComingSoon pageName="System Status" />} />
+        <Route path="/detections" element={<Detections />} />
+        <Route path="/anomaly-analysis" element={<AnomalyAnalysis />} />
+        <Route path="/map" element={<MapView />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/model" element={<ModelView />} />
+        <Route path="/system-status" element={<SystemStatus />} />
       </Routes>
     </AppShell>
   );

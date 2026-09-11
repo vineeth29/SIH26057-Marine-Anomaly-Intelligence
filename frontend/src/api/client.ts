@@ -1,11 +1,8 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 if (!API_BASE_URL) {
-  // Fail loudly in dev rather than silently hitting a relative path
-  // that happens to 404.
-  // eslint-disable-next-line no-console
   console.error(
-    "VITE_API_BASE_URL is not set. Create a .env file — see .env.example."
+    "VITE_API_BASE_URL is not set. Create a .env file."
   );
 }
 
@@ -28,7 +25,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
       const body = await res.json();
       detail = body.detail ?? detail;
     } catch {
-      // response body wasn't JSON — keep statusText
+      // response body wasn't JSON - keep statusText
     }
     throw new ApiError(res.status, detail);
   }
@@ -49,4 +46,36 @@ export async function apiPostForm<T>(
     body: form,
   });
   return handleResponse<T>(res);
+}
+
+export async function apiPostJson<T>(
+  path: string,
+  body: unknown
+): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return handleResponse<T>(res);
+}
+
+export async function apiPatchJson<T>(
+  path: string,
+  body: unknown
+): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return handleResponse<T>(res);
+}
+
+export function getApiBaseUrl(): string {
+  return API_BASE_URL || "http://127.0.0.1:8000/api";
 }

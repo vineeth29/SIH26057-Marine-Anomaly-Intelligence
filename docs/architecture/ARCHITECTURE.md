@@ -28,7 +28,7 @@ Raw Sonar Tile (H x W x C)
        │         └── Row-wise brightness & zero-run detection -> Blank fraction
        │
        ▼
-[04. YOLOv8n Target Detection]
+[04. YOLOv8s Target Detection]
        └── Multi-class inference -> [Bounding Boxes, Class IDs, Raw Confidence]
        │
        ▼

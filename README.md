@@ -4,7 +4,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18-61DAFB.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.0+-646CFF.svg)](https://vitejs.dev/)
-[![YOLOv8](https://img.shields.io/badge/YOLO-v8n-00FFFF.svg)](https://docs.ultralytics.com/)
+[![YOLOv8](https://img.shields.io/badge/YOLO-v8s-00FFFF.svg)](https://docs.ultralytics.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An enterprise-grade autonomous side-scan sonar (SSS) interpretation and underwater marine debris/anomaly intelligence system engineered for naval survey vessels, autonomous underwater vehicles (AUVs), and coastal defense operations.
@@ -13,7 +13,7 @@ An enterprise-grade autonomous side-scan sonar (SSS) interpretation and underwat
 
 ## Key System Highlights
 
-- **Multi-Modal AI Pipeline**: Integrates YOLOv8n object detection (5 marine classes), Conv2D Autoencoder anomaly scoring, acoustic shadow geometric verification, and signal dropout detection.
+- **Multi-Modal AI Pipeline**: Integrates YOLOv8s object detection (5 marine classes), Conv2D Autoencoder anomaly scoring, acoustic shadow geometric verification, and signal dropout detection.
 - **Physics-Informed Evidence Fusion**: Deterministic weighting framework fusing detector confidence, shadow-contrast ratios, reconstruction error, and signal-to-noise ratio into an operator evidence score ($0.0 - 1.0$) and threat severity index.
 - **Offline & Low-SWaP Capable**: Fully autonomous, zero-cloud dependency with mean inference latency $\sim 54\,\text{ms}$ on CPU and single-digit milliseconds on GPU.
 - **Operator Command Dashboard**: Modern responsive UI with canvas detection overlays, interactive mission maps, live telemetry review, and automated ReportLab PDF, CSV, and JSON report exports.
@@ -25,7 +25,7 @@ An enterprise-grade autonomous side-scan sonar (SSS) interpretation and underwat
 ```mermaid
 flowchart TD
     A[Raw SSS Sonar Raster] --> B[Sonar Preprocessor]
-    B -->|CLAHE & Dynamic Stretch| C[Stage 1: YOLOv8n Detector]
+    B -->|CLAHE & Dynamic Stretch| C[Stage 1: YOLOv8s Detector]
     B -->|Grayscale Normalization| D[Stage 2: Autoencoder Anomaly Scorer]
     B -->|Acoustic Profile| E[Stage 3: Dropout & Quality Analyzer]
     

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { analyzeSonar, analysisImageUrl } from "../api/sonar";
 import type { AnalysisResponse } from "../api/types";
@@ -14,6 +14,11 @@ type ImageTab = "raw" | "processed" | "annotated";
 export function SonarAnalysis() {
   const [file, setFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState<ImageTab>("raw");
+
+  const previewUrl = useMemo(() => {
+    if (!file) return null;
+    return URL.createObjectURL(file);
+  }, [file]);
 
   const mutation = useMutation<AnalysisResponse, unknown, File>({
     mutationFn: (f) => analyzeSonar({ file: f }),
@@ -38,7 +43,7 @@ export function SonarAnalysis() {
             <button
               disabled={!file}
               onClick={() => file && mutation.mutate(file)}
-              className="rounded-md bg-action px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-action/90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-md bg-action px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-action/90 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
               Analyze Sonar
             </button>
@@ -46,7 +51,27 @@ export function SonarAnalysis() {
         </div>
       )}
 
-      {mutation.isPending && <AnalysisProgress />}
+      {/* Active AI Analysis State: Live Scan Line over uploaded frame */}
+      {mutation.isPending && (
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              {previewUrl && (
+                <SonarViewer
+                  imageUrl={previewUrl}
+                  detections={[]}
+                  imageWidth={1200}
+                  imageHeight={600}
+                  isScanning={true}
+                />
+              )}
+            </div>
+            <div className="flex flex-col justify-center">
+              <AnalysisProgress />
+            </div>
+          </div>
+        </div>
+      )}
 
       {mutation.isError && (
         <ErrorState
@@ -55,17 +80,19 @@ export function SonarAnalysis() {
         />
       )}
 
+      {/* Completed Result View */}
       {result && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 animate-[pageEntrance_150ms_ease-out]">
           <div className="flex items-center justify-between">
             <div className="flex gap-1 rounded-md border border-border bg-card p-1">
               {(["raw", "processed", "annotated"] as ImageTab[]).map((tab) => (
                 <button
                   key={tab}
+                  type="button"
                   onClick={() => setActiveTab(tab)}
-                  className={`rounded px-3 py-1 text-xs font-medium capitalize transition-colors ${
+                  className={`rounded px-3 py-1 text-xs font-medium capitalize transition-colors cursor-pointer ${
                     activeTab === tab
-                      ? "bg-ocean/10 text-ocean"
+                      ? "bg-ocean/10 text-ocean font-semibold"
                       : "text-text-secondary hover:text-text-navy"
                   }`}
                 >
@@ -74,18 +101,19 @@ export function SonarAnalysis() {
               ))}
             </div>
             <button
+              type="button"
               onClick={() => {
                 mutation.reset();
                 setFile(null);
               }}
-              className="rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-navy hover:bg-bg-secondary"
+              className="rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-navy hover:bg-bg-secondary transition-colors cursor-pointer"
             >
               New Analysis
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
               <SonarViewer
                 imageUrl={analysisImageUrl(
                   result.analysis_id,
@@ -94,6 +122,7 @@ export function SonarAnalysis() {
                 detections={activeTab === "raw" ? result.detections : []}
                 imageWidth={result.image.width}
                 imageHeight={result.image.height}
+                isScanning={false}
               />
             </div>
             <div className="flex flex-col gap-4">
@@ -105,7 +134,7 @@ export function SonarAnalysis() {
             <h2 className="mb-2 text-sm font-semibold text-text-navy">
               Detection Results
             </h2>
-            <DetectionList detections={result.detections} />
+            <DetectionList detections={result.detections} quality={result.quality} />
           </div>
         </div>
       )}

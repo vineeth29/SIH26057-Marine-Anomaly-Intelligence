@@ -12,7 +12,7 @@ This document defines the single canonical source of truth for the SIH26057 plat
 | **Active Backend** | `backend/app/api.py` | FastAPI application serving all REST endpoints |
 | **Pipeline Bridge** | `backend/app/pipeline_bridge.py` | Connects raw request to multi-stage AI pipeline |
 | **Active Frontend** | `frontend/src/` | Vite + React + TypeScript operator interface |
-| **Production Model** | `models/best.pt` | 5-class YOLOv8n detector checkpoint (22.5 MB) |
+| **Production Model** | `models/best.pt` | 5-class YOLOv8s detector checkpoint (22.5 MB) |
 | **Anomaly Model** | `models/anomaly/autoencoder.pt` | PyTorch Conv2D Autoencoder checkpoint (1.25 MB) |
 | **Evidence Fusion** | `ai/fusion/confidence_fusion.py` | Multi-signal fusion & severity scoring engine |
 | **Shadow Analyzer** | `ai/shadow_analysis/shadow_analyzer.py`| Acoustic highlight-shadow geometric analyzer |

@@ -2,7 +2,7 @@
 
 ## Model Performance Summary
 
-The production model `models/best.pt` is a customized YOLOv8n network trained and evaluated across side-scan sonar datasets (Drishti SSS, SubPipe SSS, and synthetic validation benchmarks).
+The production model `models/best.pt` is a customized YOLOv8s network trained and evaluated across side-scan sonar datasets (Drishti SSS, SubPipe SSS, and synthetic validation benchmarks).
 
 ### Detection Metrics (IoU = 0.50)
 
@@ -25,7 +25,7 @@ The production model `models/best.pt` is a customized YOLOv8n network trained an
 | Pipeline Stage | Mean Execution Time | % of Total Time |
 |---|---|---|
 | **Image Decoding & Preprocessing** | 8.4 ms | 15.5% |
-| **YOLOv8n Inference** | 31.2 ms | 57.8% |
+| **YOLOv8s Inference** | 31.2 ms | 57.8% |
 | **Autoencoder Anomaly Scoring** | 6.8 ms | 12.6% |
 | **Acoustic Shadow Geometric Analysis** | 4.2 ms | 7.8% |
 | **Evidence Fusion & Severity Ranking** | 1.1 ms | 2.0% |

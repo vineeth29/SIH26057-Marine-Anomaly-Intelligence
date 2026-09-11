@@ -1,16 +1,10 @@
-import { apiPostForm } from "./client";
+import { apiGet, apiPostForm } from "./client";
 import type { AnalysisResponse } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export type ImageVariant = "raw" | "processed" | "annotated";
 
-/**
- * Direct URL to a result image variant for a completed analysis.
- * Not run through apiGet since it's rendered via <img src=...>, not
- * parsed as JSON. Default "raw" — the interactive viewer draws its own
- * bbox overlay on top of this using AnalysisResponse.detections[].bbox.
- */
 export function analysisImageUrl(
   analysisId: string,
   variant: ImageVariant = "raw"
@@ -37,4 +31,8 @@ export async function analyzeSonar(
   if (params.depthM !== undefined) form.append("depth_m", String(params.depthM));
 
   return apiPostForm<AnalysisResponse>("/sonar/analyze", form);
+}
+
+export async function getLatestAnalysis(): Promise<AnalysisResponse | null> {
+  return apiGet<AnalysisResponse | null>("/analysis/latest");
 }
