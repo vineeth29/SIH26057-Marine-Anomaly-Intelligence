@@ -1,0 +1,11 @@
+{
+  "classes": {
+    "1": "submarine_pipeline",
+    "2": "shipwreck",
+    "3": "ghost_net",
+    "4": "mine_cylinder"
+  },
+  "mAP50": 0.712,
+  "model": "YOLOv8s",
+  "input_size": 640
+}

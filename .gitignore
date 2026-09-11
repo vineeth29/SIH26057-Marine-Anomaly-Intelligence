@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+train_env/
+wheels/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env.local
+
+# Databases & Runtime Logs
+*.log
+*.sqlite3
+*.db-journal
+
+# Large Raw Datasets (Keep data/ directory structure but ignore huge data files)
+data/**/*.png
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.raw
+data/**/*.mat
+!data/README.md
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

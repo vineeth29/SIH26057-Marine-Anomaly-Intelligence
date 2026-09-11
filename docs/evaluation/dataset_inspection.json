@@ -1,0 +1,54 @@
+{
+  "dataset_dir": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\data\\drishti_sss",
+  "data_yaml_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\data\\drishti_sss\\drishti.yaml",
+  "class_names": {
+    "0": "crab_pot",
+    "1": "submarine_pipeline",
+    "2": "shipwreck",
+    "3": "ghost_net",
+    "4": "mine_cylinder"
+  },
+  "splits": {
+    "test": {
+      "images": 700,
+      "label_files": 700,
+      "annotations": 901
+    },
+    "train": {
+      "images": 3875,
+      "label_files": 3875,
+      "annotations": 4297
+    },
+    "val": {
+      "images": 630,
+      "label_files": 630,
+      "annotations": 904
+    }
+  },
+  "class_distribution": {
+    "shipwreck": 2623,
+    "submarine_pipeline": 1321,
+    "ghost_net": 1140,
+    "mine_cylinder": 1018
+  },
+  "total_annotations": 6102,
+  "unique_classes_found": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "resolution_stats": {
+    "sample_count": 60,
+    "width_min": 640,
+    "width_max": 640,
+    "height_min": 500,
+    "height_max": 500
+  },
+  "bbox_stats": {
+    "count": 6102,
+    "mean_area_normalized": 0.1576,
+    "min_area_normalized": 0.0,
+    "max_area_normalized": 0.9672
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "split": "test",
+  "model_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\models\\best_multiclass.pt",
+  "overall": {
+    "precision": 0.7357,
+    "recall": 0.6785,
+    "map50": 0.6878,
+    "map50_95": 0.5178,
+    "f1": 0.7059
+  },
+  "per_class": {
+    "submarine_pipeline": {
+      "precision": 0.984,
+      "recall": 0.9943,
+      "ap50": 0.995,
+      "ap50_95": 0.7921
+    },
+    "shipwreck": {
+      "precision": 0.4948,
+      "recall": 0.4152,
+      "ap50": 0.4068,
+      "ap50_95": 0.2223
+    },
+    "ghost_net": {
+      "precision": 0.9928,
+      "recall": 1.0,
+      "ap50": 0.995,
+      "ap50_95": 0.892
+    },
+    "mine_cylinder": {
+      "precision": 0.4713,
+      "recall": 0.3044,
+      "ap50": 0.3545,
+      "ap50_95": 0.1647
+    }
+  }
+}

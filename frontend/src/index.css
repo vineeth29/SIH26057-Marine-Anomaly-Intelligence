@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* Spec color system (section 6) — light theme only. Defining these via
+   @theme makes them available as Tailwind utilities: bg-bg-primary,
+   text-text-navy, border-border, bg-status-high, etc. */
+@theme {
+  --color-bg-primary: #F5F9FC;
+  --color-bg-secondary: #EEF5F9;
+  --color-card: #FFFFFF;
+  --color-ocean: #087EA4;
+  --color-action: #1261A0;
+  --color-teal: #0E9F9A;
+  --color-text-navy: #16324F;
+  --color-text-secondary: #60758A;
+  --color-border: #DCE7EF;
+  --color-status-success: #159A72;
+  --color-status-warning: #D99000;
+  --color-status-high: #D9534F;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-navy);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Leaflet needs explicit-dimension containers to render correctly. */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+}

@@ -1,0 +1,312 @@
+{
+  "dataset_name": "SubPipeMini2 / SubPipeMiniSSS",
+  "dataset_root": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS",
+  "data_dir": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS\\DATA",
+  "sensor_config": {
+    "cam0": [
+      {
+        "name": "GoPro Camera"
+      },
+      {
+        "resolution": [
+          {
+            "width": 2704
+          },
+          {
+            "height": 1520
+          },
+          {
+            "channels": 3
+          }
+        ]
+      },
+      {
+        "frame_rate": 30
+      },
+      {
+        "frame_rate_units": "Hz (hertz)"
+      },
+      {
+        "offset_x": 619.0
+      },
+      {
+        "offset_x_units": "mm (milimeters)"
+      },
+      {
+        "offset_z": -120.0
+      },
+      {
+        "offset_Z_units": "mm (milimeters)"
+      },
+      {
+        "offset_theta": -56.0
+      },
+      {
+        "offset_theta_units": "\u00b0 (degrees)"
+      },
+      {
+        "fx": 1612.36
+      },
+      {
+        "fy": 1622.56
+      },
+      {
+        "cx": 1365.43
+      },
+      {
+        "cy": 741.27
+      },
+      {
+        "k1_k2_p1_p2": [
+          -0.247,
+          0.0869,
+          -0.006,
+          0.001
+        ]
+      }
+    ],
+    "cam1": [
+      {
+        "name": "Gray-scale Camera"
+      },
+      {
+        "resolution": [
+          {
+            "width": 1936
+          },
+          {
+            "height": 1216
+          },
+          {
+            "channels": 1
+          }
+        ]
+      },
+      {
+        "frame_rate": 4
+      },
+      {
+        "frame_rate_units": "Hz (hertz)"
+      },
+      {
+        "offset_x": -813.0
+      },
+      {
+        "offset_x_units": "mm (milimeters)"
+      },
+      {
+        "offset_z": -45.0
+      },
+      {
+        "offset_Z_units": "mm (milimeters)"
+      },
+      {
+        "offset_theta": -90.0
+      },
+      {
+        "offset_theta_units": "\u00b0 (degrees)"
+      }
+    ],
+    "SSS": [
+      {
+        "entity1": [
+          {
+            "name": "Low Frequency SSS"
+          },
+          {
+            "frequency": 455
+          },
+          {
+            "unit": "kilo Hertz (kHz)"
+          }
+        ]
+      },
+      {
+        "entity2": [
+          {
+            "name": "High Freqency SSS"
+          },
+          {
+            "frequency": 900
+          },
+          {
+            "unit": "kilo Hertz (kHz)"
+          }
+        ]
+      },
+      {
+        "normalization_factor": 0.2
+      },
+      {
+        "TVG_factor": 280
+      },
+      {
+        "colormap": "bronze"
+      },
+      {
+        "SSS_horizontal_angles": 20
+      },
+      {
+        "SSS_horizontal_angles_unit": "\u00b0 (degrees)"
+      },
+      {
+        "brand": "Klein3500"
+      }
+    ]
+  },
+  "authoritative_class_mapping": {
+    "0": "Pipeline (submarine_pipeline)"
+  },
+  "coco_categories_hf": [
+    {
+      "id": 1,
+      "name": "Pipeline",
+      "supercategory": "Pipeline"
+    }
+  ],
+  "coco_categories_lf": [
+    {
+      "id": 1,
+      "name": "Pipeline",
+      "supercategory": "Pipeline"
+    }
+  ],
+  "summary": {
+    "total_images": 2066,
+    "total_annotated_images": 1365,
+    "total_unannotated_images": 701,
+    "total_bounding_boxes": 1422,
+    "total_missing_labels": 701,
+    "total_orphan_labels": 3,
+    "total_invalid_labels": 0,
+    "combined_class_distribution": {
+      "0": 1422
+    }
+  },
+  "hf_sonar": {
+    "name": "HF_Sonar",
+    "image_count": 1011,
+    "label_file_count": 671,
+    "annotated_image_count": 669,
+    "unannotated_image_count": 342,
+    "missing_labels_count": 342,
+    "missing_labels_sample": [
+      "1693569220.750",
+      "1693569221.750",
+      "1693569222.750",
+      "1693569223.750",
+      "1693569224.750",
+      "1693569225.750",
+      "1693569226.750",
+      "1693569227.750",
+      "1693569228.750",
+      "1693569229.750"
+    ],
+    "orphan_labels_count": 2,
+    "orphan_labels_sample": [
+      "classes",
+      "d.860"
+    ],
+    "formats": {
+      ".pbm": 43,
+      ".bpm": 7
+    },
+    "resolution": {
+      "sample_count": 50,
+      "width": {
+        "min": 5000,
+        "max": 5000,
+        "mode": 5000
+      },
+      "height": {
+        "min": 500,
+        "max": 500,
+        "mode": 500
+      },
+      "channels": 3
+    },
+    "class_distribution": {
+      "0": 696
+    },
+    "invalid_labels_count": 0,
+    "invalid_labels_sample": [],
+    "bbox_stats": {
+      "total_boxes": 696,
+      "mean_area": 0.081767,
+      "min_area": 0.00345,
+      "max_area": 0.14058,
+      "std_area": 0.025358,
+      "mean_width": 0.0865,
+      "mean_height": 0.918
+    },
+    "coco_categories": [
+      {
+        "id": 1,
+        "name": "Pipeline",
+        "supercategory": "Pipeline"
+      }
+    ]
+  },
+  "lf_sonar": {
+    "name": "LF_Sonar",
+    "image_count": 1055,
+    "label_file_count": 697,
+    "annotated_image_count": 696,
+    "unannotated_image_count": 359,
+    "missing_labels_count": 359,
+    "missing_labels_sample": [
+      "1693569219.799",
+      "1693569220.750",
+      "1693569221.750",
+      "1693569222.750",
+      "1693569223.750",
+      "1693569224.750",
+      "1693569225.750",
+      "1693569226.750",
+      "1693569227.750",
+      "1693569228.750"
+    ],
+    "orphan_labels_count": 1,
+    "orphan_labels_sample": [
+      "classes"
+    ],
+    "formats": {
+      ".pbm": 50
+    },
+    "resolution": {
+      "sample_count": 50,
+      "width": {
+        "min": 2500,
+        "max": 2500,
+        "mode": 2500
+      },
+      "height": {
+        "min": 500,
+        "max": 500,
+        "mode": 500
+      },
+      "channels": 3
+    },
+    "class_distribution": {
+      "0": 726
+    },
+    "invalid_labels_count": 0,
+    "invalid_labels_sample": [],
+    "bbox_stats": {
+      "total_boxes": 726,
+      "mean_area": 0.081796,
+      "min_area": 0.00265,
+      "max_area": 0.129888,
+      "std_area": 0.027025,
+      "mean_width": 0.088,
+      "mean_height": 0.8984
+    },
+    "coco_categories": [
+      {
+        "id": 1,
+        "name": "Pipeline",
+        "supercategory": "Pipeline"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+# SIH26057 — Backend API requirements
+#
+# Install alongside the project root requirements.txt:
+#   pip install -r requirements.txt -r backend/requirements.txt
+#
+# This file lists only the packages backend/app/*.py itself needs beyond
+# what pipeline_service.py's own dependency chain already requires
+# (torch, ultralytics, opencv, numpy, PyYAML, sqlalchemy — all in the
+# root requirements.txt). See SETUP.md for the full verified dependency
+# set and a note on the opencv-python-headless substitution.
+
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9   # required for UploadFile / form parsing

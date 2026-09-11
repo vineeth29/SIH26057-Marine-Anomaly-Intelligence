@@ -1,0 +1,69 @@
+{
+  "hardware": {
+    "device": "CUDA",
+    "gpu_name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "pytorch_version": "2.5.1+cu121"
+  },
+  "benchmark_config": {
+    "n_runs": 20,
+    "image_width": 512,
+    "image_height": 256,
+    "yolo_model": "models\\best_multiclass.pt"
+  },
+  "latency": {
+    "load_ms": {
+      "mean_ms": 3.09,
+      "std_ms": 1.94,
+      "min_ms": 2.5,
+      "max_ms": 11.31
+    },
+    "preprocess_ms": {
+      "mean_ms": 7.8,
+      "std_ms": 0.59,
+      "min_ms": 7.28,
+      "max_ms": 9.66
+    },
+    "yolo_ms": {
+      "mean_ms": 85.02,
+      "std_ms": 339.17,
+      "min_ms": 8.51,
+      "max_ms": 1526.0
+    },
+    "dropout_ms": {
+      "mean_ms": 0.38,
+      "std_ms": 0.05,
+      "min_ms": 0.34,
+      "max_ms": 0.56
+    },
+    "shadow_ms": {
+      "mean_ms": 0.58,
+      "std_ms": 0.12,
+      "min_ms": 0.49,
+      "max_ms": 1.05
+    },
+    "anomaly_ms": {
+      "mean_ms": 2.3,
+      "std_ms": 5.23,
+      "min_ms": 1.0,
+      "max_ms": 24.52
+    },
+    "fusion_ms": {
+      "mean_ms": 0.01,
+      "std_ms": 0.0,
+      "min_ms": 0.01,
+      "max_ms": 0.02
+    },
+    "fp_filter_ms": {
+      "mean_ms": 0.35,
+      "std_ms": 0.09,
+      "min_ms": 0.29,
+      "max_ms": 0.71
+    },
+    "total_ms": {
+      "mean_ms": 99.55,
+      "std_ms": 346.97,
+      "min_ms": 20.67,
+      "max_ms": 1573.67
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "evaluation_name": "SubPipeMini2 / best_multiclass.pt",
+  "checkpoint": {
+    "absolute_path": "C:\\Users\\vinee\\Downloads\\SIH-2026-Marine-Debris-Detection-main (1)\\SIH-2026-Marine-Debris-Detection-main\\models\\best_multiclass.pt",
+    "sha256": "0e1cb68aff53a80ec51aebff5769f08f0153994d54451658c69908d2721599b2",
+    "size_mb": 5.939
+  },
+  "model_class_names": {
+    "0": "crab_pot",
+    "1": "submarine_pipeline",
+    "2": "shipwreck",
+    "3": "ghost_net",
+    "4": "mine_cylinder"
+  },
+  "cross_dataset_mapping": {
+    "subpipe_class_0_Pipeline": "\u2192 model class 1 (submarine_pipeline)",
+    "notes": "SubPipe has 1 class (Pipeline/class 0). Model class 1 = submarine_pipeline. Only class-1 predictions are compared."
+  },
+  "dataset": {
+    "root": "C:\\Users\\vinee\\uwsn-project\\datasets\\subpipe\\SubPipeMini2\\SubPipeMiniSSS",
+    "hf_image_resolution": "5000x500 px (PBM, 10:1 aspect)",
+    "lf_image_resolution": "2500x500 px (PBM, 5:1 aspect)"
+  },
+  "conf_threshold": 0.25,
+  "iou_threshold": 0.5,
+  "combined": {
+    "total_annotated_images": 1365,
+    "total_background_images": 701,
+    "total_gt_boxes": 1422,
+    "TP": 0,
+    "FP": 0,
+    "FN": 1422,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "ap50_mean": 0.0,
+    "ap50_mean_pct": 0.0,
+    "background_images_with_any_FP": 0,
+    "false_positive_rate_on_backgrounds": 0.0,
+    "false_positive_rate_pct": 0.0
+  },
+  "hf_sonar_900khz": {
+    "name": "HF_900kHz",
+    "annotated_images_evaluated": 669,
+    "background_images_evaluated": 342,
+    "total_gt_boxes": 696,
+    "TP": 0,
+    "FP": 0,
+    "FN": 696,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "ap50": 0.0,
+    "ap50_percent": 0.0,
+    "background_images_with_any_FP": 0,
+    "background_total_FP_detections": 0,
+    "false_positive_rate_on_backgrounds": 0.0,
+    "false_positive_rate_pct": 0.0,
+    "latency": {
+      "mean_ms": 15.79,
+      "median_ms": 14.25,
+      "min_ms": 8.6,
+      "max_ms": 1564.23,
+      "p95_ms": 18.91
+    },
+    "conf_threshold": 0.25,
+    "iou_threshold": 0.5
+  },
+  "lf_sonar_455khz": {
+    "name": "LF_455kHz",
+    "annotated_images_evaluated": 696,
+    "background_images_evaluated": 359,
+    "total_gt_boxes": 726,
+    "TP": 0,
+    "FP": 0,
+    "FN": 726,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "ap50": 0.0,
+    "ap50_percent": 0.0,
+    "background_images_with_any_FP": 0,
+    "background_total_FP_detections": 0,
+    "false_positive_rate_on_backgrounds": 0.0,
+    "false_positive_rate_pct": 0.0,
+    "latency": {
+      "mean_ms": 14.89,
+      "median_ms": 13.93,
+      "min_ms": 9.58,
+      "max_ms": 94.18,
+      "p95_ms": 21.98
+    },
+    "conf_threshold": 0.25,
+    "iou_threshold": 0.5
+  }
+}
