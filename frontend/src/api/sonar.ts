@@ -1,7 +1,5 @@
-import { apiGet, apiPostForm } from "./client";
+import { apiGet, apiPostForm, getApiBaseUrl } from "./client";
 import type { AnalysisResponse } from "./types";
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export type ImageVariant = "raw" | "processed" | "annotated";
 
@@ -9,7 +7,8 @@ export function analysisImageUrl(
   analysisId: string,
   variant: ImageVariant = "raw"
 ): string {
-  return `${API_BASE_URL}/analysis/${analysisId}/image?variant=${variant}`;
+  const base = getApiBaseUrl();
+  return `${base}/analysis/${encodeURIComponent(analysisId)}/image?variant=${variant}`;
 }
 
 export interface AnalyzeSonarParams {
