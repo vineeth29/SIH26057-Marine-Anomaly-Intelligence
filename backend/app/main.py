@@ -5,6 +5,7 @@ Python pipeline (services/, ai/, utils/). No AI logic lives here.
 Run with:
     uvicorn backend.app.main:app --reload --port 8000
 (from the repository root)
+"""
 import os
 # Restrict multi-threading thread buffers to prevent OOM on 512MB RAM servers
 os.environ["OMP_NUM_THREADS"] = "1"
