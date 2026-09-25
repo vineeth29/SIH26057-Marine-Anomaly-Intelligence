@@ -353,6 +353,13 @@ def run_analysis(
         raise ValueError("Uploaded file is not a readable image.")
 
     h, w = img.shape[:2]
+    # Safeguard: Downscale oversized photos to max 1280px to protect memory limits
+    max_dim = max(h, w)
+    if max_dim > 1280:
+        scale = 1280.0 / max_dim
+        img = cv2.resize(img, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
+        h, w = img.shape[:2]
+
     analysis_id = f"AN-{uuid.uuid4().hex[:10].upper()}"
 
     pipeline = get_pipeline()
@@ -363,6 +370,8 @@ def run_analysis(
         lon=lon,
         depth_m=depth_m,
     )
+    import gc
+    gc.collect()
 
     detections = [_to_detection_schema(pd) for pd in result.detections]
 
