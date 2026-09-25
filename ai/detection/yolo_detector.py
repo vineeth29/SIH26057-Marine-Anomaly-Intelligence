@@ -86,11 +86,11 @@ class YOLODetector:
 
     def detect(self, img: np.ndarray, **kwargs) -> list:
 
-        # V3 was trained and validated at 1280 resolution.
-        # Keep inference at 1280 so the small-object regime is preserved.
+        # Use imgsz=640 on constrained CPU/server memory (Render Free 512MB)
+        # to ensure peak RAM stays strictly under 385MB.
         results = self.model(
             img,
-            imgsz=1280,
+            imgsz=640,
             conf=self.conf_threshold,
             iou=self.iou_threshold,
             device=self.device,

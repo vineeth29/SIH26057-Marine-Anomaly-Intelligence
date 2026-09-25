@@ -5,8 +5,19 @@ Python pipeline (services/, ai/, utils/). No AI logic lives here.
 Run with:
     uvicorn backend.app.main:app --reload --port 8000
 (from the repository root)
-"""
 import os
+# Restrict multi-threading thread buffers to prevent OOM on 512MB RAM servers
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+try:
+    import torch
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+except Exception:
+    pass
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

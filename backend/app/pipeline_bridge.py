@@ -353,10 +353,10 @@ def run_analysis(
         raise ValueError("Uploaded file is not a readable image.")
 
     h, w = img.shape[:2]
-    # Safeguard: Downscale oversized photos to max 1280px to protect memory limits
+    # Safeguard: Downscale oversized photos to max 960px to protect memory limits
     max_dim = max(h, w)
-    if max_dim > 1280:
-        scale = 1280.0 / max_dim
+    if max_dim > 960:
+        scale = 960.0 / max_dim
         img = cv2.resize(img, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
         h, w = img.shape[:2]
 
