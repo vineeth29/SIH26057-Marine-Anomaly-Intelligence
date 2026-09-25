@@ -1,10 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
-
-if (!API_BASE_URL) {
-  console.error(
-    "VITE_API_BASE_URL is not set. Create a .env file."
-  );
-}
+const envApiUrl = import.meta.env.VITE_API_BASE_URL as string | undefined;
+const API_BASE_URL = (envApiUrl !== undefined && envApiUrl !== "") ? envApiUrl.replace(/\/$/, "") : "/api";
 
 export class ApiError extends Error {
   status: number;
@@ -77,5 +72,5 @@ export async function apiPatchJson<T>(
 }
 
 export function getApiBaseUrl(): string {
-  return API_BASE_URL || "http://127.0.0.1:8000/api";
+  return API_BASE_URL || "/api";
 }

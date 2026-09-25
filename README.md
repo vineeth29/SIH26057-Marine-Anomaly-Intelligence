@@ -1,3 +1,13 @@
+---
+title: Marine Anomaly Intelligence
+emoji: 🌊
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # 🌊 SIH26057 — Marine Anomaly Intelligence
 
 ### AI-Powered Automated Underwater Marine Debris and Anomaly Detection System using Side-Scan Sonar Imagery
