@@ -538,3 +538,6 @@ The core engineering contribution of **SIH26057** is not the standard applicatio
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for complete terms.
 
 Developed for **Smart India Hackathon 2026 (Problem Statement SIH26057)**: *AI-Powered Automated Underwater Marine Debris and Anomaly Detection System using Side-Scan Sonar Imagery*.
+## GrowthX Off Campus Verification
+
+GrowthX Off Campus Code: `7V59AG`
